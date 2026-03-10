@@ -1,0 +1,4 @@
+# Placeholder for trained models
+# Run training to generate:
+#   - currency_classifier.pth (ResNet50 CNN)
+#   - yolo_currency.pt (YOLOv8l)
