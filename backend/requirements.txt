@@ -1,19 +1,37 @@
+# ============================================================
+#  Indian Currency Detection - Pinned Python Dependencies
+#  Python Version: 3.10.x  (recommended: 3.10.12)
+# ============================================================
+
+# ── Web Framework ─────────────────────────────────────────────
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 python-multipart==0.0.6
+aiofiles==23.2.1
+
+# ── Database ──────────────────────────────────────────────────
 pymongo==4.6.1
 motor==3.3.2
+
+# ── Authentication ────────────────────────────────────────────
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 bcrypt==4.1.2
+
+# ── Validation / Config ───────────────────────────────────────
 pydantic==2.5.3
 pydantic-settings==2.1.0
+python-dotenv==1.0.0
+
+# ── AI / ML ───────────────────────────────────────────────────
 torch==2.1.2
 torchvision==0.16.2
 ultralytics==8.0.235
+
+# ── Image Processing ─────────────────────────────────────────
 opencv-python==4.9.0.80
 Pillow==10.2.0
 numpy==1.26.3
+
+# ── HTTP ─────────────────────────────────────────────────────
 requests==2.31.0
-python-dotenv==1.0.0
-aiofiles==23.2.1

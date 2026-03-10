@@ -1,180 +1,197 @@
-# 🇮🇳 Indian Currency Detection System
+# 🇮🇳 Live Indian Currency Detection System
 
-> AI-powered Indian currency detection and classification using **YOLOv8 + ResNet50 CNN + OCR Verification**.
+An AI-powered Indian Currency Detection system using **YOLOv8**, **ResNet50 CNN**, and **OCR Verification**.  
+Supports both **image upload** and **live webcam detection**.
 
-## 🎯 Accuracy Target
-- **Image Detection**: 97–99%
-- **Live Camera**: 95–98%
+---
 
-## 🏗️ Architecture
+## 🧰 Tech Stack
 
-```
-Image → [YOLOv8 Detection] → [ResNet50 Classification] → [OCR Verification] → Final Result
-```
+| Layer       | Technology                         |
+|-------------|-------------------------------------|
+| Frontend    | React 18 + Vite + TailwindCSS       |
+| Backend     | FastAPI (Python 3.10)               |
+| AI Models   | YOLOv8 + ResNet50 CNN               |
+| OCR         | Google Vision API                   |
+| Database    | MongoDB                             |
+| Auth        | JWT (JSON Web Tokens)               |
 
-### Multi-Stage Pipeline
-1. **Stage 1 – YOLO Detection**: Detect currency note region in image (YOLOv8l)
-2. **Stage 2 – CNN Classification**: Classify denomination using ResNet50
-3. **Stage 3 – OCR Verification**: Validate text using Google Vision API
-4. **Final Decision**: Confidence voting with minimum 0.85 threshold
+---
 
-## 📁 Project Structure
+## ✅ Prerequisites
 
-```
-currency_detection/
-├── backend/
-│   ├── main.py                # FastAPI application
-│   ├── config.py              # Configuration settings
-│   ├── routes/
-│   │   ├── auth.py            # Register & Login APIs
-│   │   ├── detection.py       # Detection APIs
-│   │   └── history.py         # History & Stats APIs
-│   ├── detection/
-│   │   ├── pipeline.py        # Main detection pipeline
-│   │   ├── cnn_model.py       # ResNet50 classifier
-│   │   └── ocr_verification.py # OCR validation
-│   ├── training/
-│   │   ├── train_cnn.py       # CNN training script
-│   │   ├── train_yolo.py      # YOLO training script
-│   │   └── train_all.py       # Master training script
-│   ├── utils/
-│   │   ├── auth.py            # JWT authentication
-│   │   └── preprocessing.py   # Image preprocessing
-│   └── database/
-│       └── connection.py      # MongoDB connection
-├── frontend/
-│   ├── src/
-│   │   ├── pages/             # React pages
-│   │   ├── components/        # Reusable components
-│   │   ├── services/          # API service layer
-│   │   └── context/           # Auth context
-│   └── package.json
-├── models/                     # Trained model files
-└── Indian Currency Dataset/    # Training dataset
-    ├── 10/ 20/ 50/ 100/ 200/ 500/ 2000/
+Install the following **before** running setup:
+
+| Software      | Version     | Download Link                                      |
+|---------------|-------------|-----------------------------------------------------|
+| Python        | 3.10.x      | https://www.python.org/downloads/                  |
+| Node.js       | 18+         | https://nodejs.org/                                |
+| MongoDB       | 6.x         | https://www.mongodb.com/try/download/community     |
+| Git           | Latest      | https://git-scm.com/downloads                      |
+
+> **⚠️ Important:** During Python installation, make sure to check **"Add Python to PATH"**.
+
+---
+
+## � Quick Setup (Windows)
+
+### Step 1 — Clone the Repository
+```bash
+git clone https://github.com/road2tec/Live-Currency-detection-
+cd Live-Currency-detection-
 ```
 
-## 🛠️ Tech Stack
+### Step 2 — Run Setup Script
+Double-click `setup.bat` OR run in terminal:
+```bash
+setup.bat
+```
+This will:
+- Create a Python virtual environment
+- Install all backend Python packages
+- Install all frontend Node packages
+- Create your `.env` file from the template
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React.js, Tailwind CSS, Vite |
-| Backend | Python, FastAPI |
-| AI Models | PyTorch, YOLOv8, ResNet50 |
-| Computer Vision | OpenCV |
-| OCR | Google Vision API |
-| Database | MongoDB |
-| Auth | JWT + bcrypt |
+### Step 3 — Configure Environment Variables
+Open `backend/.env` and fill in your credentials:
 
-## 🚀 Quick Start
+```env
+MONGO_URI=mongodb://localhost:27017/currency_detection
+SECRET_KEY=your-random-secret-key-here
+GOOGLE_VISION_API_KEY=your-google-vision-api-key
+```
 
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
-- MongoDB (running on localhost:27017)
+See the [Environment Variables](#-environment-variables) section below for details.
 
-### 1. Backend Setup
+### Step 4 — Start MongoDB
+Make sure MongoDB is running on your machine:
+```bash
+# If installed as a service it starts automatically.
+# Otherwise run:
+mongod --dbpath C:\data\db
+```
 
+### Step 5 — Launch the Application
+Double-click `start.bat` OR run:
+```bash
+start.bat
+```
+
+The application will open:
+- 🌐 **Frontend**: http://localhost:5173
+- ⚙️ **Backend API**: http://localhost:8000
+- 📄 **API Docs**: http://localhost:8000/docs
+
+---
+
+## 🔧 Manual Setup (Step-by-Step)
+
+If you prefer to run things manually:
+
+### Backend
 ```bash
 cd backend
+python -m venv venv
+venv\Scripts\activate        # Windows
 pip install -r requirements.txt
-```
-
-### 2. Train Models
-
-```bash
-cd backend
-
-# Train both models
-python -m training.train_all --dataset "../Indian Currency Dataset" --output "../models"
-
-# Or train individually
-python -m training.train_cnn    # Train ResNet50 CNN
-python -m training.train_yolo   # Train YOLOv8
-```
-
-### 3. Start Backend Server
-
-```bash
-cd backend
 python main.py
-# Server runs at http://localhost:8000
-# API docs at http://localhost:8000/docs
 ```
 
-### 4. Frontend Setup
-
+### Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
-# App runs at http://localhost:3000
 ```
-
-## 📡 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/register` | Register new user |
-| POST | `/api/login` | Login & get JWT |
-| POST | `/api/detect` | Upload image detection |
-| POST | `/api/live-detect` | Live camera detection |
-| POST | `/api/detect-multiple` | Multi-note detection |
-| GET | `/api/history` | Detection history |
-| GET | `/api/stats` | Detection statistics |
-| DELETE | `/api/history/{id}` | Delete history item |
-| DELETE | `/api/history` | Clear all history |
-
-## 🧠 Detection Response Format
-
-```json
-{
-  "denomination": 500,
-  "confidence": 0.96,
-  "ocr_text": "Reserve Bank of India ₹500",
-  "is_fake": false,
-  "status": "confirmed",
-  "processing_time": 0.45
-}
-```
-
-## 🔐 Authentication
-
-- JWT-based authentication
-- Passwords hashed with bcrypt
-- Token included in Authorization header: `Bearer <token>`
-
-## 📊 Supported Denominations
-
-| Denomination | Class |
-|-------------|-------|
-| ₹10 | 0 |
-| ₹20 | 1 |
-| ₹50 | 2 |
-| ₹100 | 3 |
-| ₹200 | 4 |
-| ₹500 | 5 |
-| ₹2000 | 6 |
-
-## 🔧 Image Preprocessing
-
-1. Resize to target dimensions
-2. Gaussian blur (mild denoising)
-3. CLAHE contrast enhancement
-4. Noise reduction (fastNlMeans)
-5. Normalization (ImageNet stats)
-
-## 📈 Training Augmentation
-
-- Random rotation (±15°)
-- Brightness/contrast changes
-- Gaussian blur
-- Random noise
-- Zoom (0.9–1.1×)
-- Perspective distortion
-- Mosaic augmentation (YOLO)
-- CutMix / MixUp
 
 ---
 
-Built with ❤️ using PyTorch, FastAPI, React, and MongoDB.
+## 🔐 Environment Variables
+
+Copy `backend/.env.example` → `backend/.env` and fill in the values:
+
+| Variable                       | Description                                  | Default                                |
+|-------------------------------|----------------------------------------------|----------------------------------------|
+| `MONGO_URI`                   | MongoDB connection string                    | `mongodb://localhost:27017/currency_detection` |
+| `DB_NAME`                     | MongoDB database name                        | `currency_detection`                   |
+| `SECRET_KEY`                  | JWT signing key (keep secret!)               | *(must be changed)*                    |
+| `ALGORITHM`                   | JWT algorithm                                | `HS256`                                |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Login session duration in minutes            | `1440` (24 hours)                      |
+| `GOOGLE_VISION_API_KEY`       | Google Cloud Vision API key for OCR          | *(required for OCR)*                   |
+| `YOLO_MODEL_PATH`             | Path to the YOLO model file                  | `../models/yolo_currency.pt`           |
+| `CNN_MODEL_PATH`              | Path to the CNN classifier model file        | `../models/currency_classifier.pth`    |
+| `HOST`                        | Backend server host                          | `0.0.0.0`                              |
+| `PORT`                        | Backend server port                          | `8000`                                 |
+| `UPLOAD_DIR`                  | Directory for uploaded images                | `./uploads`                            |
+| `MAX_FILE_SIZE`               | Max upload size in bytes                     | `10485760` (10 MB)                     |
+| `CONFIDENCE_THRESHOLD`        | Minimum AI confidence to accept a detection  | `0.85`                                 |
+
+> **💡 Tip:** Generate a strong `SECRET_KEY` by running: `python -c "import secrets; print(secrets.token_hex(32))"`
+
+---
+
+## 🗂️ Project Structure
+
+```
+Live-Currency-detection-/
+│
+├── backend/                    # FastAPI Python backend
+│   ├── .env.example            # ← Copy this to .env and fill in credentials
+│   ├── .env                    # ← Your actual credentials (NOT committed to Git)
+│   ├── requirements.txt        # Python dependencies (pinned versions)
+│   ├── main.py                 # FastAPI app entry point
+│   ├── config.py               # App configuration loader
+│   ├── database/               # MongoDB connection
+│   ├── detection/              # AI detection pipeline (YOLO + CNN + OCR)
+│   ├── models/                 # Pydantic schemas
+│   ├── routes/                 # API route handlers
+│   │   ├── auth.py             # Register / Login
+│   │   ├── detection.py        # Image & live detection
+│   │   └── history.py          # Detection history & stats
+│   ├── training/               # Model training scripts
+│   └── uploads/                # Uploaded images (auto-created)
+│
+├── frontend/                   # React + Vite frontend
+│   ├── src/                    # React source code
+│   ├── package.json            # Node.js dependencies (pinned versions)
+│   └── vite.config.js          # Vite configuration
+│
+├── models/                     # Trained AI model files
+│   ├── yolo_currency.pt        # YOLOv8 detection model
+│   └── currency_classifier.pth # ResNet50 CNN classifier model
+│
+├── .gitignore                  # Git ignore rules
+├── setup.bat                   # One-click setup script (Windows)
+├── start.bat                   # One-click launch script (Windows)
+└── README.md                   # This file
+```
+
+---
+
+## � Features
+
+- 📷 **Image Upload Detection** — Upload any photo of Indian currency
+- 🎥 **Live Webcam Detection** — Real-time currency detection via camera
+- 🔐 **User Authentication** — Register/login with JWT-secured sessions
+- 📊 **Detection History** — View past detections and statistics
+- 🤖 **Multi-Stage AI Pipeline** — YOLOv8 → CNN Classifier → OCR Verification
+- 💵 **Supports all denominations** — ₹10, ₹20, ₹50, ₹100, ₹200, ₹500, ₹2000
+
+---
+
+## � Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `python` not found | Reinstall Python and check "Add to PATH" during install |
+| `node` not found | Reinstall Node.js and restart terminal |
+| MongoDB connection failed | Start MongoDB service or run `mongod` manually |
+| Model file not found | Ensure `models/yolo_currency.pt` and `models/currency_classifier.pth` exist |
+| Port 8000 already in use | Change `PORT=8001` in `.env` and update frontend API URL |
+| Google Vision API error | Check your `GOOGLE_VISION_API_KEY` in `.env` |
+
+---
+
+## 📞 Support
+
+For any issues, contact the development team.
