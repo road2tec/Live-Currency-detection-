@@ -54,4 +54,6 @@ coverage/
 /yolo_dataset/
 *.pth
 *.pt
+!models/*.pth
+!models/*.pt
 datasets/
